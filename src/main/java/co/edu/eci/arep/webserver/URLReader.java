@@ -11,6 +11,9 @@ import java.util.Set;
 
 public class URLReader {
 
+    /**
+     * Make a request to a URL and print the response headers and the response body
+     */
     public static void main(String[] args) throws Exception {
         String site = "https://escuelaing.s3.amazonaws.com/production/images/primera.min-1440x700_PRHnonm.png?AWSAccessKeyId=AKIAWFY3NGTFJHVI634A&Signature=xs6wJx8R68farSdrvwb5ijBR2l8%3D&Expires=1740153017";
         // Crea el objeto que representa una URL
