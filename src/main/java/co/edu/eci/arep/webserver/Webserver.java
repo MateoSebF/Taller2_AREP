@@ -1,8 +1,9 @@
 package co.edu.eci.arep.webserver;
 
-import java.net.MalformedURLException;
+import java.io.IOException;
+import java.net.URISyntaxException;
 
-import co.edu.eci.arep.webserver.URLExamples.URLParser;
+import co.edu.eci.arep.webserver.Server.HttpServer;
 
 /**
  *
@@ -10,8 +11,8 @@ import co.edu.eci.arep.webserver.URLExamples.URLParser;
  */
 public class WebServer {
 
-    public static void main(String[] args) throws MalformedURLException {
-        System.out.println("Hello World!");
-        URLParser.main(args);
+    public static void main(String[] args) throws IOException, URISyntaxException  {
+        // Run the http server
+        HttpServer.main(args);
     }
 }
