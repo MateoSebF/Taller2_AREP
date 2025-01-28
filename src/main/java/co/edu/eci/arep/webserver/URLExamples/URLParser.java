@@ -1,5 +1,5 @@
 
-package co.edu.eci.arep.webserver;
+package co.edu.eci.arep.webserver.URLExamples;
 
 import java.net.MalformedURLException;
 import java.net.URL;

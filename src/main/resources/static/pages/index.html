@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Form Example</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="home.css">
+</head>
+
+<body>
+    <div class="form">
+        <h1>Form with GET</h1>
+        <form action="/getPersonObject">
+            <div id="form-get">
+                <div class="flex-row">
+                    <label for="get_name">
+                        <div class="flex-row"  id="img1">
+                            
+                        </div>
+                    </label>
+                    <input type="text" id="get_name" name="get_name" value="John">
+                </div>
+            </div>
+            <input class="add-button" type="button" value="Add property" onclick="addProperty()">
+            <input class="button" type="button" value="Submit" onclick="loadGetMsg()">
+        </form>
+        <div class="add" id="getrespmsg"></div>
+    </div>
+    <div class="form">
+        <h1>Form with POST</h1>
+        <form action="/postPersonObject">
+            <div class="flex-row">
+                <label for="postname">
+                    <div class="flex-row" id="img2">
+                        <img src="http://localhost:35000/placeholder.png" alt='user' width='25' height='25'>
+                        Name:
+                    </div>
+                </label>
+                <input type="text" id="postname" name="name" value="John">
+            </div>
+            <input class="button" type="button" value="Submit" onclick="loadPostMsg(postname)">
+        </form>
+        <div class="add" id="postrespmsg"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>

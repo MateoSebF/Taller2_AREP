@@ -1,5 +1,5 @@
 
-package co.edu.eci.arep.webserver;
+package co.edu.eci.arep.webserver.URLExamples;
 
 /**
  *
