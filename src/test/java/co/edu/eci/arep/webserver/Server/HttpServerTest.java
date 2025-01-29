@@ -73,7 +73,7 @@ public class HttpServerTest {
     public void testMakeConnectionCSS() {
         HttpConnectionExample httpConnection = new HttpConnectionExample();
         try {
-            HttpURLConnection con = httpConnection.makeConnection("GET", "/style.css", "");
+            HttpURLConnection con = httpConnection.makeConnection("GET", "/home.css", "");
             assertEquals(200, con.getResponseCode());
         } catch (IOException e) {
             e.printStackTrace();
@@ -84,7 +84,7 @@ public class HttpServerTest {
     public void testGetContentTypeCSS() {
         HttpConnectionExample httpConnection = new HttpConnectionExample();
         try {
-            HttpURLConnection con = httpConnection.makeConnection("GET", "/style.css", "");
+            HttpURLConnection con = httpConnection.makeConnection("GET", "/home.css", "");
             assertEquals("text/css", con.getContentType());
         } catch (IOException e) {
             e.printStackTrace();
@@ -95,9 +95,9 @@ public class HttpServerTest {
     public void testGetResponseCSS() {
         HttpConnectionExample httpConnection = new HttpConnectionExample();
         try {
-            String response = httpConnection.getResponse("GET", "/style.css", "");
+            String response = httpConnection.getResponse("GET", "/home.css", "");
             String expected = "";
-            String fileName = "src/main/resources/static/styles/" + "style.css";
+            String fileName = "src/main/resources/static/styles/" + "home.css";
             // Leer el contenido desde el archivo
             try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
                 String line;
@@ -229,6 +229,6 @@ public class HttpServerTest {
             e.printStackTrace();
         }   
     }   
-
+    
 
 }

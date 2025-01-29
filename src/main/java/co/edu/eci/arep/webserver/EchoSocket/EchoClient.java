@@ -9,7 +9,7 @@ import java.net.*;
 
 public class EchoClient {
 
-    /*
+    /**
      * Method that creates a client socket and connects to a server socket.
      */
     public static void main(String[] args) {

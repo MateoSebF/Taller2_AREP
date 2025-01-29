@@ -9,7 +9,7 @@ import java.io.*;
 
 public class EchoServer {
 
-    /*
+    /**
      * Method that creates a server socket and waits for a client to connect to it.
      */
     public static void main(String[] args) throws IOException {

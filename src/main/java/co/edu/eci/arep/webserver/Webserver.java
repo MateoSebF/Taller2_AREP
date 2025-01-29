@@ -11,6 +11,9 @@ import co.edu.eci.arep.webserver.Server.HttpServer;
  */
 public class WebServer {
 
+    /**
+     * @param args the command line arguments
+     */
     public static void main(String[] args) throws IOException, URISyntaxException  {
         // Run the http server
         HttpServer.main(args);

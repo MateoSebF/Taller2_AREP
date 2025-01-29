@@ -11,13 +11,27 @@ import java.util.HashMap;
 
 import java.io.*;
 
+/**
+ * HttpServer
+ */	
 public class HttpServer implements Runnable {
 
+    /**
+     * Main method
+     * 
+     * @param args
+     * 
+     * @throws IOException
+     * @throws URISyntaxException
+     */
     public static void main(String[] args) throws IOException, URISyntaxException {
         Thread thread = new Thread(new HttpServer());
         thread.start();
     }
 
+    /**
+     * Run method that starts the server in the port 35000 and listens for incoming connections
+     */
     public void run() {
         ServerSocket serverSocket = null;
         try {
@@ -81,6 +95,13 @@ public class HttpServer implements Runnable {
         }
     }
 
+    /**
+     * This method manages the request from the endpoint
+     * 
+     * @param typeRequest the type of request
+     * @param resourceURI the URI of the resource
+     * @param out the output stream
+     */
     private static void manageRequestFromEndPoint(String typeRequest, URI resourceURI, OutputStream out) {
         HashMap<String, String> queryParams = new HashMap<>();
         if (resourceURI.getQuery() != null) {
@@ -113,6 +134,14 @@ public class HttpServer implements Runnable {
         }
     }
 
+    /**
+     * This method send a response to the client of a GET request with a HTML file
+     * 
+     * @param resourceURI the URI of the resource
+     * @param out the output stream
+     * 
+     * @throws IOException
+     */
     private static void sendGetHtmlString(URI resourceURI, OutputStream out) throws IOException {
         String outputLine = "HTTP/1.1 200 OK\r\n"
                 + "Content-Type: text/html\r\n"
@@ -130,6 +159,14 @@ public class HttpServer implements Runnable {
         out.write(outputLine.getBytes());
     }
 
+    /**
+     * This method send a response to the client of a GET request with a CSS file
+     * 
+     * @param resourceURI the URI of the resource
+     * @param out the output stream
+     * 
+     * @throws IOException
+     */
     private static void sendGetCssString(URI resourceURI, OutputStream out) throws IOException {
         String outputLine = "HTTP/1.1 200 OK\r\n"
                 + "Content-Type: text/css\r\n"
@@ -147,6 +184,14 @@ public class HttpServer implements Runnable {
         out.write(outputLine.getBytes());
     }
 
+    /**
+     * This method send a response to the client of a GET request with a JS file
+     * 
+     * @param resourceURI the URI of the resource
+     * @param out the output stream
+     * 
+     * @throws IOException
+     */
     private static void sendGetJsString(URI resourceURI, OutputStream out) throws IOException {
         String outputLine = "HTTP/1.1 200 OK\r\n"
                 + "Content-Type: text/javascript\r\n"
@@ -164,6 +209,14 @@ public class HttpServer implements Runnable {
         out.write(outputLine.getBytes());
     }
 
+    /**
+     * This method send a response to the client of a GET request with an image
+     * 
+     * @param resourceURI the URI of the resource
+     * @param out the output stream
+     * 
+     * @throws IOException
+     */
     private static void sendGetImageString(URI resourceURI, OutputStream out) throws IOException {
         String fileName = "src/main/resources/static/images" + resourceURI.getPath();
         File file = new File(fileName);
@@ -196,6 +249,14 @@ public class HttpServer implements Runnable {
         out.flush();
     }
 
+    /**
+     * This method send a response to the client of a GET request with an object from the query
+     * 
+     * @param queryParams the query parameters
+     * @param out the output stream
+     * 
+     * @throws IOException
+     */
     private static void getObjectFromQuery(HashMap<String, String> queryParams, OutputStream out) throws IOException {
         String response = "HTTP/1.1 200 OK\r\n"
                 + "Content-Type: application/json\r\n"
@@ -216,6 +277,13 @@ public class HttpServer implements Runnable {
         out.write(response.getBytes());
     }
 
+    /**
+     * This method send a response to the client of a GET request with a 404 Not Found
+     * 
+     * @param out the output stream
+     * 
+     * @throws IOException
+     */
     private static void sendNotFoundResponse(OutputStream out) throws IOException {
         String response = "HTTP/1.1 404 Not Found\r\n"
                 + "Content-Type: text/plain\r\n"
