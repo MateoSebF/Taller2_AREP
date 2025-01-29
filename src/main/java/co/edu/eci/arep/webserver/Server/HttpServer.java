@@ -11,9 +11,14 @@ import java.util.HashMap;
 
 import java.io.*;
 
-public class HttpServer {
+public class HttpServer implements Runnable {
 
     public static void main(String[] args) throws IOException, URISyntaxException {
+        Thread thread = new Thread(new HttpServer());
+        thread.start();
+    }
+
+    public void run() {
         ServerSocket serverSocket = null;
         try {
             serverSocket = new ServerSocket(35000);
@@ -32,36 +37,48 @@ public class HttpServer {
                 System.exit(1);
             }
 
-            // Create input and output streams
-            InputStream in = clientSocket.getInputStream();
-            OutputStream out = clientSocket.getOutputStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+            try (
+                    InputStream in = clientSocket.getInputStream()) {
+                OutputStream out = clientSocket.getOutputStream();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 
-            String inputLine;
-            boolean isFirstLine = true;
-            String typeRequest = "";
-            String file = "";
-            while ((inputLine = reader.readLine()) != null) {
-                if (isFirstLine) {
-                    typeRequest = inputLine.split(" ")[0];
-                    file = inputLine.split(" ")[1];
-                    isFirstLine = false;
+                String inputLine;
+                boolean isFirstLine = true;
+                String typeRequest = "";
+                String file = "";
+                while ((inputLine = reader.readLine()) != null) {
+                    if (isFirstLine) {
+                        typeRequest = inputLine.split(" ")[0];
+                        file = inputLine.split(" ")[1];
+                        isFirstLine = false;
+                    }
+                    System.out.println("Received: " + inputLine);
+                    if (!reader.ready()) {
+                        break;
+                    }
                 }
-                System.out.println("Received: " + inputLine);
-                if (!reader.ready()) {
-                    break;
-                }
+
+                URI resourceURI = new URI(file);
+                manageRequestFromEndPoint(typeRequest, resourceURI, out);
+
+                // Close streams and socket
+                out.close();
+                in.close();
+            } catch (IOException | URISyntaxException e) {
+                e.printStackTrace();
             }
 
-            URI resourceURI = new URI(file);
-            manageRequestFromEndPoint(typeRequest, resourceURI, out);
-
-            // Close streams and socket
-            out.close();
-            in.close();
-            clientSocket.close();
+            try {
+                clientSocket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-        serverSocket.close();
+        try {
+            serverSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private static void manageRequestFromEndPoint(String typeRequest, URI resourceURI, OutputStream out) {
@@ -179,15 +196,6 @@ public class HttpServer {
         out.flush();
     }
 
-    private static void sendNotFoundResponse(OutputStream out) throws IOException {
-        String response = "HTTP/1.1 404 Not Found\r\n"
-                + "Content-Type: text/plain\r\n"
-                + "\r\n"
-                + "404 Not Found";
-        out.write(response.getBytes());
-        out.flush();
-    }
-
     private static void getObjectFromQuery(HashMap<String, String> queryParams, OutputStream out) throws IOException {
         String response = "HTTP/1.1 200 OK\r\n"
                 + "Content-Type: application/json\r\n"
@@ -206,5 +214,14 @@ public class HttpServer {
         }
         response += "}";
         out.write(response.getBytes());
+    }
+
+    private static void sendNotFoundResponse(OutputStream out) throws IOException {
+        String response = "HTTP/1.1 404 Not Found\r\n"
+                + "Content-Type: text/plain\r\n"
+                + "\r\n"
+                + "404 Not Found";
+        out.write(response.getBytes());
+        out.flush();
     }
 }
