@@ -10,12 +10,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import java.io.*;
+import java.util.function.BiFunction;
 
 /**
  * HttpServer
  */	
 public class HttpServer implements Runnable {
+    
 
+    public static HashMap<String, BiFunction<String,String,String>> services = new HashMap();
+    
     /**
      * Main method
      * 
@@ -35,7 +39,7 @@ public class HttpServer implements Runnable {
     public void run() {
         ServerSocket serverSocket = null;
         try {
-            serverSocket = new ServerSocket(35000);
+            serverSocket = new ServerSocket(36000);
         } catch (IOException e) {
             System.err.println("Could not listen on port: 35000.");
             System.exit(1);
@@ -123,8 +127,8 @@ public class HttpServer implements Runnable {
                     || resourceURI.getPath().endsWith(".svg")
                     || resourceURI.getPath().endsWith(".ico")) {
                 sendGetImageString(resourceURI, out);
-            } else if (resourceURI.getPath().startsWith("/app/getObjectFromQuery")) {
-                getObjectFromQuery(queryParams, out);
+            } else if (resourceURI.getPath().startsWith("/app")) {
+                manageRestAPI(resourceURI.getPath(), queryParams, out);
             } else {
                 sendNotFoundResponse(out);
                 return;
@@ -257,12 +261,12 @@ public class HttpServer implements Runnable {
      * 
      * @throws IOException
      */
-    private static void getObjectFromQuery(HashMap<String, String> queryParams, OutputStream out) throws IOException {
+    private static void manageRestAPI(String path, HashMap<String, String> queryParams, OutputStream out) throws IOException {
         String response = "HTTP/1.1 200 OK\r\n"
-                + "Content-Type: application/json\r\n"
+                + "Content-Type: text/plain\r\n"
                 + "\r\n"
                 + "{\n";
-        ArrayList<String> keys = new ArrayList<>(queryParams.keySet());
+        /*ArrayList<String> keys = new ArrayList<>(queryParams.keySet());
         for (String key : keys) {
             String value = queryParams.get(key);
             // Decode the value
@@ -272,7 +276,11 @@ public class HttpServer implements Runnable {
             } else {
                 response += "\"" + key + "\" : \"" + value + "\"\n";
             }
+        }*/
+        for (String k : services.keySet()){
+            System.out.println(k);
         }
+        response += services.get(path).apply(path, path);
         response += "}";
         out.write(response.getBytes());
     }
@@ -291,5 +299,13 @@ public class HttpServer implements Runnable {
                 + "404 Not Found";
         out.write(response.getBytes());
         out.flush();
+    }
+    
+    public static void staticfiles (String path){
+        return;
+    }
+    
+    public static void get(String route, BiFunction<String,String,String> function){
+        services.put("/app" + route, function);
     }
 }

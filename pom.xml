@@ -7,8 +7,8 @@
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>23</maven.compiler.source>
-        <maven.compiler.target>23</maven.compiler.target>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
         <exec.mainClass>co.edu.eci.arep.webserver.WebServer</exec.mainClass>
     </properties>
     <build>
@@ -37,7 +37,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>${exec.mainClass}</mainClass>
+                    <mainClass>co.edu.eci.arep.webserver.WebServer</mainClass>
                 </configuration>
             </plugin>
         </plugins>
