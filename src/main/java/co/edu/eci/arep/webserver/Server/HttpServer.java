@@ -18,7 +18,7 @@ import java.util.function.BiFunction;
 public class HttpServer implements Runnable {
     
 
-    public static HashMap<String, BiFunction<String,String,String>> services = new HashMap();
+    public static HashMap<String, BiFunction<HttpRequest,HttpResponse,String>> services = new HashMap();
     
     /**
      * Main method
@@ -280,7 +280,7 @@ public class HttpServer implements Runnable {
         for (String k : services.keySet()){
             System.out.println(k);
         }
-        response += services.get(path).apply(path, path);
+        response += services.get(path).apply(new HttpRequest(queryParams), new HttpResponse());
         response += "}";
         out.write(response.getBytes());
     }
@@ -305,7 +305,7 @@ public class HttpServer implements Runnable {
         return;
     }
     
-    public static void get(String route, BiFunction<String,String,String> function){
+    public static void get(String route, BiFunction<HttpRequest,HttpResponse,String> function){
         services.put("/app" + route, function);
     }
 }

@@ -19,10 +19,14 @@ public class WebServer {
      */
     public static void main(String[] args) throws IOException, URISyntaxException  {
         HttpServer.staticfiles("/webroot");
-        //HttpServer.get("/hello", (req, resp) -> "Hello " + req.getValues("name"));
+        HttpServer.get("/hello", (req, resp) -> "Hello " + req.getValues("name"));
         HttpServer.get("/pi", (req, resp) -> {
             return String.valueOf(Math.PI); 
         });
+        HttpServer.get("/murcia", (req, resp) -> {
+            return "murcia"; 
+        });
+        
         HttpServer.main(args);
     }
    
