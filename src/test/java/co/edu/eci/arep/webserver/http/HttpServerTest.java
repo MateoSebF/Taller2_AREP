@@ -1,6 +1,7 @@
-package co.edu.eci.arep.webserver.Server;
+package co.edu.eci.arep.webserver.http;
 
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.BufferedReader;

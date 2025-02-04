@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Form Example</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="home.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Object Creation System</h1>
+        </div>
+        <form class="method_selection">
+            <label>
+                <input type="radio" name="method" value="get" onclick="showContent('get')" checked> GET
+            </label>
+            <div class="barrier_method"></div>
+            <label>
+                <input type="radio" name="method" value="post" onclick="showContent('post')"> POST
+            </label>
+            <div class="barrier_method"></div>
+            <label>
+                <input type="radio" name="method" value="put" onclick="showContent('put')"> PUT
+            </label>
+            <div class="barrier_method"></div>
+            <label>
+                <input type="radio" name="method" value="delete" onclick="showContent('delete')"> DELETE
+            </label>
+        </form>
+
+        <div class="form-content">
+            <div class="get_form form">
+                <form action="/getObject">
+                    <h1>Form to get a Object with GET method</h1>
+                    <div id="get_data">
+                        <div class="property">
+                            <label class="name-align" for="get_name">
+                                <div class="name-align" id="img1">
+                                </div>
+                            </label>
+                            <input type="text" id="get_name" name="get_name" value="John">
+                        </div>
+                    </div>
+                    <input class="button" type="button" value="Submit" onclick="getAObject()">
+                </form>
+                <div id="getObjectDetails"></div>
+            </div>
+            <div class="post_form form" style="display: none;">
+                <form action="/postObject">
+                    <h1>Form to create a new object with POST method</h1>
+                    <div id="post_data">
+                        <div class="property">
+                            <label for="post_name">
+                                <div class="name-align" id="img2">
+                                    <img src="http://localhost:35000/placeholder.png" alt='user' width='25' height='25'>
+                                    Name:
+                                </div>
+                            </label>
+                            <input type="text" id="post_name" name="post_name" value="John">
+                        </div>
+                    </div>
+                    <input class="add-button" type="button" value="Add property" onclick="addProperty()">
+                    <input class="button" type="button" value="Submit" onclick="postAObject(postname)">
+                </form>
+                <div id="postNewObject"></div>
+            </div>
+            <div class="put_form form" style="display: none;">
+                <form action="/putObject">
+                    <h1>Form to modify a object with PUT method</h1>
+                    <div id="put_data">
+                        <div class="property">
+                            <label for="put_name">
+                                <div class="name-align" id="img3">
+                                    <img src="http://localhost:35000/placeholder.png" alt='user' width='25' height='25'>
+                                    Name:
+                                </div>
+                            </label>
+                            <input type="text" id="put_name" name="put_name" value="John">
+                        </div>
+                    </div>
+                    <input class="add-button" type="button" value="Add property">
+                    <input class="button" type="button" value="Submit" onclick="putAObject(postname)">
+                </form>
+                <div id="putObject"></div>
+            </div>
+            <div class="delete_form form" style="display: none;">
+                <form action="/deleteObject">
+                    <h1>Form to delete a Object with DELETE method</h1>
+                    <div id="delete_data">
+                        <div class="property">
+                            <label for="delete_name">
+                                <div class="name-align" id="img4">
+                                </div>
+                            </label>
+                            <input type="text" id="delete_name" name="delete_name" value="John">
+                        </div>
+                    </div>
+                    <input class="button" type="button" value="Submit" onclick="deleteAObject()">
+                </form>
+                <div id="deleteObject"></div>
+            </div>
+        </div>
+        <script src="script.js"></script>
+    </div>
+</body>
+
+</html>

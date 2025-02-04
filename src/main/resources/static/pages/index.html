@@ -9,41 +9,60 @@
 </head>
 
 <body>
-    <div class="form">
-        <h1>Form with GET</h1>
-        <form action="/getPersonObject">
-            <div id="form-get">
-                <div class="flex-row">
-                    <label for="get_name">
-                        <div class="flex-row"  id="img1">
-                            
+    <div class="container">
+        <div class="header">
+            <h1>Object Creation System</h1>
+        </div>
+        <form class="method_selection">
+            <label>
+                <input type="radio" name="method" value="get" onclick="showContent('get')" checked> GET
+            </label>
+            <div class="barrier_method"></div>
+            <label>
+                <input type="radio" name="method" value="post" onclick="showContent('post')"> POST
+            </label>
+        </form>
+
+        <div class="form-content">
+            <div class="get_form form">
+                <form >
+                    <h1>Form to get a Object with GET method</h1>
+                    <div id="get_data">
+                        <div class="property">
+                            <label class="name-align" for="get_name">
+                                <div class="name-align" id="img1">
+                                </div>
+                            </label>
+                            <input type="text" id="get_name" name="get_name" value="John">
                         </div>
-                    </label>
-                    <input type="text" id="get_name" name="get_name" value="John">
-                </div>
-            </div>
-            <input class="add-button" type="button" value="Add property" onclick="addProperty()">
-            <input class="button" type="button" value="Submit" onclick="loadGetMsg()">
-        </form>
-        <div class="add" id="getrespmsg"></div>
-    </div>
-    <div class="form">
-        <h1>Form with POST</h1>
-        <form action="/postPersonObject">
-            <div class="flex-row">
-                <label for="postname">
-                    <div class="flex-row" id="img2">
-                        <img src="http://localhost:35000/placeholder.png" alt='user' width='25' height='25'>
-                        Name:
                     </div>
-                </label>
-                <input type="text" id="postname" name="name" value="John">
+                    <input class="button" type="button" value="Submit" onclick="getAObject()">
+                </form>
+                <div class="result-info" id="get_result"></div>
             </div>
-            <input class="button" type="button" value="Submit" onclick="loadPostMsg(postname)">
-        </form>
-        <div class="add" id="postrespmsg"></div>
+            <div class="post_form form" style="display: none;">
+                <form >
+                    <h1>Form to create a new object with POST method</h1>
+                    <div id="post_data">
+                        <div class="property">
+                            <label for="post_name">
+                                <div class="name-align" id="img2">
+                                    <img src="http://localhost:35000/placeholder.png" alt='user' width='25' height='25'>
+                                    Name:
+                                </div>
+                            </label>
+                            <input type="text" id="post_name" name="post_name" value="John">
+                        </div>
+                    </div>
+                    <input class="add-button" type="button" value="Add property" onclick="addProperty()">
+                    <input class="button" type="button" value="Submit" onclick="postAObject()">
+                </form>
+                <div class="result-info" id="post_result"></div>
+            </div>
+
+        </div>
+        <script src="script.js"></script>
     </div>
-    <script src="script.js"></script>
 </body>
 
 </html>

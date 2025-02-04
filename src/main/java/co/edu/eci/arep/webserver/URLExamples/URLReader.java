@@ -1,4 +1,4 @@
-package co.edu.eci.arep.webserver.URLExamples;
+package co.edu.eci.arep.webserver.urlexamples;
 import java.io.*;
 import java.net.*;
 import java.util.List;

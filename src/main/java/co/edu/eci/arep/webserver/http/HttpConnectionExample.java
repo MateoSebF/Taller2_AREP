@@ -1,4 +1,4 @@
-package co.edu.eci.arep.webserver.Server;
+package co.edu.eci.arep.webserver.http;
 
 import java.io.BufferedReader;
 import java.io.IOException;

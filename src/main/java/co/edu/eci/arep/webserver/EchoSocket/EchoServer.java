@@ -1,4 +1,4 @@
-package co.edu.eci.arep.webserver.EchoSocket;
+package co.edu.eci.arep.webserver.echosocket;
 
 /**
  *
