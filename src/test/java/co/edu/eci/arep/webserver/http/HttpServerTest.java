@@ -19,6 +19,7 @@ public class HttpServerTest {
     public static void setUp() {
         System.out.println("Iniciando servidor");
         Thread thread = new Thread(new HttpServer());
+        HttpServer.staticfiles("/resources/static");
         thread.start();
     }
 
@@ -26,7 +27,7 @@ public class HttpServerTest {
     public void testMakeConnectionHTML() {
         HttpConnectionExample httpConnection = new HttpConnectionExample();
         try {
-            HttpURLConnection con = httpConnection.makeConnection("GET", "/index.html", "");
+            HttpURLConnection con = httpConnection.makeConnection("GET", "index.html", "");
             assertEquals(200, con.getResponseCode());
         } catch (IOException e) {
             e.printStackTrace();
@@ -37,7 +38,7 @@ public class HttpServerTest {
     public void testGetContentTypeHTML() {
         HttpConnectionExample httpConnection = new HttpConnectionExample();
         try {
-            HttpURLConnection con = httpConnection.makeConnection("GET", "/index.html", "");
+            HttpURLConnection con = httpConnection.makeConnection("GET", "index.html", "");
             assertEquals("text/html", con.getContentType());
         } catch (IOException e) {
             e.printStackTrace();
@@ -48,9 +49,9 @@ public class HttpServerTest {
     public void testGetResponseHTML() {
         HttpConnectionExample httpConnection = new HttpConnectionExample();
         try {
-            String response = httpConnection.getResponse("GET", "/index.html", "");
+            String response = httpConnection.getResponse("GET", "index.html", "");
             String expected = "";
-            String fileName = "src/main/resources/static/pages/" + "index.html";
+            String fileName = "src/main/resources/static/" + "index.html";
             // Leer el contenido desde el archivo
             try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
                 String line;
@@ -74,7 +75,7 @@ public class HttpServerTest {
     public void testMakeConnectionCSS() {
         HttpConnectionExample httpConnection = new HttpConnectionExample();
         try {
-            HttpURLConnection con = httpConnection.makeConnection("GET", "/home.css", "");
+            HttpURLConnection con = httpConnection.makeConnection("GET", "styles/home.css", "");
             assertEquals(200, con.getResponseCode());
         } catch (IOException e) {
             e.printStackTrace();
@@ -85,7 +86,7 @@ public class HttpServerTest {
     public void testGetContentTypeCSS() {
         HttpConnectionExample httpConnection = new HttpConnectionExample();
         try {
-            HttpURLConnection con = httpConnection.makeConnection("GET", "/home.css", "");
+            HttpURLConnection con = httpConnection.makeConnection("GET", "styles/home.css", "");
             assertEquals("text/css", con.getContentType());
         } catch (IOException e) {
             e.printStackTrace();
@@ -96,7 +97,7 @@ public class HttpServerTest {
     public void testGetResponseCSS() {
         HttpConnectionExample httpConnection = new HttpConnectionExample();
         try {
-            String response = httpConnection.getResponse("GET", "/home.css", "");
+            String response = httpConnection.getResponse("GET", "styles/home.css", "");
             String expected = "";
             String fileName = "src/main/resources/static/styles/" + "home.css";
             // Leer el contenido desde el archivo
@@ -122,7 +123,7 @@ public class HttpServerTest {
     public void testMakeConnectionJS() {
         HttpConnectionExample httpConnection = new HttpConnectionExample();
         try {
-            HttpURLConnection con = httpConnection.makeConnection("GET", "/script.js", "");
+            HttpURLConnection con = httpConnection.makeConnection("GET", "scripts/script.js", "");
             assertEquals(200, con.getResponseCode());
         } catch (IOException e) {
             e.printStackTrace();
@@ -133,7 +134,7 @@ public class HttpServerTest {
     public void testGetContentTypeJS() {
         HttpConnectionExample httpConnection = new HttpConnectionExample();
         try {
-            HttpURLConnection con = httpConnection.makeConnection("GET", "/script.js", "");
+            HttpURLConnection con = httpConnection.makeConnection("GET", "scripts/script.js", "");
             assertEquals("text/javascript", con.getContentType());
         } catch (IOException e) {
             e.printStackTrace();
@@ -144,7 +145,7 @@ public class HttpServerTest {
     public void testGetResponseJS() {
         HttpConnectionExample httpConnection = new HttpConnectionExample();
         try {
-            String response = httpConnection.getResponse("GET", "/script.js", "");
+            String response = httpConnection.getResponse("GET", "scripts/script.js", "");
             String expected = "";
             String fileName = "src/main/resources/static/scripts/" + "script.js";
             // Leer el contenido desde el archivo
@@ -170,7 +171,7 @@ public class HttpServerTest {
     public void testMakeConnectionImage() {
         HttpConnectionExample httpConnection = new HttpConnectionExample();
         try {
-            HttpURLConnection con = httpConnection.makeConnection("GET", "/placeholder.png", "");
+            HttpURLConnection con = httpConnection.makeConnection("GET", "images/placeholder.png", "");
             assertEquals(200, con.getResponseCode());
         } catch (IOException e) {
             e.printStackTrace();
@@ -181,7 +182,7 @@ public class HttpServerTest {
     public void testGetContentTypeImage() {
         HttpConnectionExample httpConnection = new HttpConnectionExample();
         try {
-            HttpURLConnection con = httpConnection.makeConnection("GET", "/placeholder.png", "");
+            HttpURLConnection con = httpConnection.makeConnection("GET", "images/placeholder.png", "");
             assertEquals("image/png", con.getContentType());
         } catch (IOException e) {
             e.printStackTrace();
@@ -193,8 +194,9 @@ public class HttpServerTest {
         HttpConnectionExample httpConnection = new HttpConnectionExample();
         try {
             // Request the image from the server
-            byte[] response = httpConnection.getResponseBytes("GET", "/placeholder.png", "");
-
+            System.out.println("Requesting image from server...");
+            byte[] response = httpConnection.getResponseBytes("GET", "images/placeholder.png", "");
+            System.out.println(response.length);
             // Read the expected image file
             String fileName = "src/main/resources/static/images/placeholder.png";
             File file = new File(fileName);

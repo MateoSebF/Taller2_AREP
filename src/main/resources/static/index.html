@@ -5,7 +5,7 @@
     <title>Form Example</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="home.css">
+    <link rel="stylesheet" type="text/css" href="styles/home.css">
 </head>
 
 <body>
@@ -46,7 +46,11 @@
                     </div>
                     <input class="button" type="button" value="Submit" onclick="getAObject()">
                 </form>
-                <div id="getObjectDetails"></div>
+                <div class="result-info">
+                    <div id="get_response" class="result">
+
+                    </div>
+                </div>
             </div>
             <div class="post_form form" style="display: none;">
                 <form action="/postObject">
@@ -55,7 +59,7 @@
                         <div class="property">
                             <label for="post_name">
                                 <div class="name-align" id="img2">
-                                    <img src="http://localhost:35000/placeholder.png" alt='user' width='25' height='25'>
+                                    <img src="http://localhost:35000/images/placeholder.png" alt='user' width='25' height='25'>
                                     Name:
                                 </div>
                             </label>
@@ -63,9 +67,13 @@
                         </div>
                     </div>
                     <input class="add-button" type="button" value="Add property" onclick="addProperty()">
-                    <input class="button" type="button" value="Submit" onclick="postAObject(postname)">
+                    <input class="button" type="button" value="Submit" onclick="postAObject()">
                 </form>
-                <div id="postNewObject"></div>
+                <div class="result-info">
+                    <div id="post_response" class="result">
+
+                    </div>
+                </div>
             </div>
             <div class="put_form form" style="display: none;">
                 <form action="/putObject">
@@ -74,20 +82,25 @@
                         <div class="property">
                             <label for="put_name">
                                 <div class="name-align" id="img3">
-                                    <img src="http://localhost:35000/placeholder.png" alt='user' width='25' height='25'>
+                                    <img src="http://localhost:35000/images/placeholder.png" alt='user' width='25' height='25'>
                                     Name:
                                 </div>
                             </label>
-                            <input type="text" id="put_name" name="put_name" value="John">
+                            <input type="text" id="put_name" name="put_name" value="John" onchange="resetAllPut()">
+                            <button class="load-button" type="button" onclick="loadUser()">⬇️</button>
                         </div>
                     </div>
-                    <input class="add-button" type="button" value="Add property">
-                    <input class="button" type="button" value="Submit" onclick="putAObject(postname)">
+                    <input style="display: none;" class="add-button" type="button" value="Add property" id="add_button_put" onclick="addPropertyPut()">
+                    <input style="display: none;" class="button" type="button" value="Submit"  id="put_object" onclick="putAObject()">
                 </form>
-                <div id="putObject"></div>
+                <div class="result-info">
+                    <div id="put_response" class="result">
+
+                    </div>
+                </div>
             </div>
             <div class="delete_form form" style="display: none;">
-                <form action="/deleteObject">
+                <form action="/">
                     <h1>Form to delete a Object with DELETE method</h1>
                     <div id="delete_data">
                         <div class="property">
@@ -100,10 +113,12 @@
                     </div>
                     <input class="button" type="button" value="Submit" onclick="deleteAObject()">
                 </form>
-                <div id="deleteObject"></div>
+                <div class="result-info">
+                    <div id="delete_response" class="result"></div>
+                </div>
             </div>
         </div>
-        <script src="script.js"></script>
+        <script src="scripts/script.js"></script>
     </div>
 </body>
 

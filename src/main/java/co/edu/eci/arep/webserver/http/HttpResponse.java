@@ -15,6 +15,10 @@ public class HttpResponse {
     private Map<String, String> headers;
     private byte[] body;
 
+    public HttpResponse() {
+        this.headers = new HashMap<>();
+    }
+    
     /**
      * Constructs an HttpResponse instance.
      * 
@@ -22,8 +26,10 @@ public class HttpResponse {
      * @param headers    A map containing response headers.
      * @param body       The response body.
      */
-    public HttpResponse() {
-        this.headers = new HashMap<>();
+    public HttpResponse(int statusCode, Map<String, String> headers, byte[] body) {
+        this.statusCode = statusCode;
+        this.headers = headers;
+        this.body = body;
     }
 
     /**

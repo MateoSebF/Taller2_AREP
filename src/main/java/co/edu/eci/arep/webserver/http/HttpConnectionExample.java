@@ -12,7 +12,7 @@ import java.net.URL;
 public class HttpConnectionExample {
 
     private static final String USER_AGENT = "Mozilla/5.0";
-    private static final String GET_URL = "http://localhost:35000";
+    private static final String GET_URL = "http://localhost:35000/";
 
     /**
      * Main method
@@ -22,7 +22,7 @@ public class HttpConnectionExample {
     public static void main(String[] args) throws IOException {
         HttpConnectionExample http = new HttpConnectionExample();
         System.out.println("Testing 1 - Send Http GET request");
-        http.makeConnection("GET", "/index.html", "");
+        http.makeConnection("GET", "index.html", "");
     }
 
     /**
@@ -44,6 +44,7 @@ public class HttpConnectionExample {
      */
     public HttpURLConnection makeConnection(String method, String endPoint, String query) throws IOException {
         String newUrl = GET_URL + endPoint + query;
+        System.out.println("Sending 'GET' request to URL : " + newUrl);
         @SuppressWarnings("deprecation")
         URL obj = new URL(newUrl);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -64,6 +65,7 @@ public class HttpConnectionExample {
      */
     public String getResponse(String method, String endPoint, String query) throws IOException {
         String newUrl = GET_URL + endPoint + query;
+        System.out.println("Sending 'GET' request to URL : " + newUrl);
         @SuppressWarnings("deprecation")
         URL obj = new URL(newUrl);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -103,6 +105,7 @@ public class HttpConnectionExample {
      */	
     public byte[] getResponseBytes(String method, String endPoint, String query) throws IOException {
         String newUrl = GET_URL + endPoint + query;
+        System.out.println(newUrl);
         @SuppressWarnings("deprecation")
         URL obj = new URL(newUrl);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();

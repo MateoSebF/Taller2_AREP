@@ -30,7 +30,7 @@ public class HttpRequest {
         URI uri = URI.create(requestLine[1]); 
         Map<String, String> headers = new HashMap<>();
         Map<String, String> queryParams = new HashMap<>();
-        String body = null;
+        String body = "";
         boolean readingBody = false;
         for (int i = 1; i < lines.length; i++) {
             if (lines[i].isEmpty()) {
@@ -38,7 +38,7 @@ public class HttpRequest {
                 continue;
             }
             if (readingBody) {
-                body = lines[i];
+                body += lines[i];
             } else {
                 String[] header = lines[i].split(": ");
                 headers.put(header[0], header[1]);
@@ -125,4 +125,5 @@ public class HttpRequest {
     public String getBody() {
         return body;
     }
+
 }

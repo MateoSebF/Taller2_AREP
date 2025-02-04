@@ -5,10 +5,10 @@ package co.edu.eci.arep.webserver.http;
  * @author mateo.forero-f
  */
 import java.net.*;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
-import java.util.Map;
 import java.io.*;
 import java.util.function.BiFunction;
 
@@ -17,8 +17,8 @@ import java.util.function.BiFunction;
  */
 public class HttpServer implements Runnable {
 
-    public static HashMap<String, String> restApiObjects = new HashMap<>();
     public static HashMap<String, BiFunction<HttpRequest, HttpResponse, HttpResponse>> services = new HashMap<>();
+    private static String staticRestFilesPath = "";
 
     /**
      * Main method
@@ -70,7 +70,8 @@ public class HttpServer implements Runnable {
                     }
                 }
                 HttpRequest request = HttpRequest.parse(completeRequest);
-                HttpResponse response = manageRequestFromEndPoint(request, out);
+                HttpResponse response = manageRequestFromEndPoint(request);
+                System.out.println(response.getStatusCode());
                 out.write(response.getBytes());
                 // Close streams and socket
                 out.close();
@@ -98,27 +99,27 @@ public class HttpServer implements Runnable {
      * 
      * @return the response
      */
-    private static HttpResponse manageRequestFromEndPoint(HttpRequest httpRequest, OutputStream out)
+    public static HttpResponse manageRequestFromEndPoint(HttpRequest httpRequest)
             throws IOException {
         if (httpRequest == null) {
-            return sendNotFoundResponse(out);
+            return sendNotFoundResponse();
         }
         URI resourceURI = httpRequest.getUri();
-        if (resourceURI.getPath().startsWith("/app")) {
-            return manageRestAPI(httpRequest, out);
-        } else if (resourceURI.getPath().endsWith(".html")) {
-            return sendGetHtmlString(httpRequest, out);
+        if (resourceURI.getPath().endsWith(".html")) {
+            return sendGetHtmlString(httpRequest);
         } else if (resourceURI.getPath().endsWith(".css")) {
-            return sendGetCssString(httpRequest, out);
+            return sendGetCssString(httpRequest);
         } else if (resourceURI.getPath().endsWith(".js")) {
-            return sendGetJsString(httpRequest, out);
+            return sendGetJsString(httpRequest);
         } else if (resourceURI.getPath().endsWith(".png") || resourceURI.getPath().endsWith(".jpg")
                 || resourceURI.getPath().endsWith(".jpeg") || resourceURI.getPath().endsWith(".gif")
                 || resourceURI.getPath().endsWith(".svg")
                 || resourceURI.getPath().endsWith(".ico")) {
-            return sendGetImageString(httpRequest, out);
+            return sendGetImageString(httpRequest);
+        } else if (resourceURI.getPath().startsWith("/app")) {
+            return manageRestAPI(httpRequest);
         } else {
-            return sendNotFoundResponse(out);
+            return sendNotFoundResponse();
         }
 
     }
@@ -133,12 +134,14 @@ public class HttpServer implements Runnable {
      * 
      * @return the response
      */
-    private static HttpResponse sendGetHtmlString(HttpRequest httpRequest, OutputStream out) throws IOException {
+    private static HttpResponse sendGetHtmlString(HttpRequest httpRequest) throws IOException {
         URI resourceURI = httpRequest.getUri();
-        String fileName = "src/main/resources/static/pages/" + resourceURI.getPath();
+        String fileName = staticRestFilesPath + resourceURI.getPath();
+        System.out.println(fileName);
         if (!new File(fileName).exists()) {
-            return sendNotFoundResponse(out);
+            return sendNotFoundResponse();
         }
+        
         HttpResponse response = new HttpResponse();
         response.setStatusCode(200);
         response.addHeader("Content-Type", "text/html");
@@ -166,11 +169,12 @@ public class HttpServer implements Runnable {
      * 
      * @return the response
      */
-    private static HttpResponse sendGetCssString(HttpRequest httpRequest, OutputStream out) throws IOException {
+    private static HttpResponse sendGetCssString(HttpRequest httpRequest) throws IOException {
         URI resourceURI = httpRequest.getUri();
-        String fileName = "src/main/resources/static/styles/" + resourceURI.getPath();
+        String fileName = staticRestFilesPath + resourceURI.getPath();
+
         if (!new File(fileName).exists()) {
-            return sendNotFoundResponse(out);
+            return sendNotFoundResponse();
         }
         HttpResponse response = new HttpResponse();
         response.setStatusCode(200);
@@ -199,11 +203,12 @@ public class HttpServer implements Runnable {
      * 
      * @return the response
      */
-    private static HttpResponse sendGetJsString(HttpRequest httpRequest, OutputStream out) throws IOException {
+    private static HttpResponse sendGetJsString(HttpRequest httpRequest) throws IOException {
         URI resourceURI = httpRequest.getUri();
-        String fileName = "src/main/resources/static/scripts/" + resourceURI.getPath();
+        String fileName = staticRestFilesPath + resourceURI.getPath();
+
         if (!new File(fileName).exists()) {
-            return sendNotFoundResponse(out);
+            return sendNotFoundResponse();
         }
         HttpResponse response = new HttpResponse();
         response.setStatusCode(200);
@@ -232,12 +237,13 @@ public class HttpServer implements Runnable {
      * 
      * @return the response
      */
-    private static HttpResponse sendGetImageString(HttpRequest httpRequest, OutputStream out) throws IOException {
+    private static HttpResponse sendGetImageString(HttpRequest httpRequest) throws IOException {
         URI resourceURI = httpRequest.getUri();
-        String fileName = "src/main/resources/static/images" + resourceURI.getPath();
+        String fileName = staticRestFilesPath + resourceURI.getPath();
+        System.out.println(fileName);
         File file = new File(fileName);
         if (!file.exists()) {
-            return sendNotFoundResponse(out);
+            return sendNotFoundResponse();
         }
         HttpResponse response = new HttpResponse();
         // Determine the file extension to set the correct Content-Type
@@ -267,20 +273,12 @@ public class HttpServer implements Runnable {
      * 
      * @return the response
      */
-    private static HttpResponse manageRestAPI(HttpRequest httpRequest, OutputStream out)
+    private static HttpResponse manageRestAPI(HttpRequest httpRequest)
             throws IOException {
-        if (httpRequest.getUri().getPath().equals("/app/objectFromQuery")) {
-            if (httpRequest.getMethod().equals("POST")) {
-                return manageRestPostObjectFromQuery(httpRequest, out);
-            } else if (httpRequest.getMethod().equals("GET")) {
-                return manageRestGetObjectFromQuery(httpRequest, out);
-            }
-            return sendNotFoundResponse(out);
-        }
         String endPoint = httpRequest.getMethod().toLowerCase() + "_" + httpRequest.getUri().getPath();
         System.out.println(endPoint);
         if (!services.containsKey(endPoint)) {
-            return sendNotFoundResponse(out);
+            return sendNotFoundResponse();
         }
         HttpResponse response = new HttpResponse();
         response = services.get(endPoint).apply(httpRequest, response);
@@ -291,11 +289,10 @@ public class HttpServer implements Runnable {
      * This method send a response to the client of a GET request with a 404 Not
      * Found
      * 
-     * @param out the output stream
      * 
      * @throws IOException
      */
-    private static HttpResponse sendNotFoundResponse(OutputStream out) throws IOException {
+    public static HttpResponse sendNotFoundResponse() throws IOException {
         HttpResponse response = new HttpResponse();
         response.setStatusCode(404);
         response.addHeader("Content-Type", "text/plain");
@@ -303,53 +300,20 @@ public class HttpServer implements Runnable {
         return response;
     }
 
-    private static HttpResponse manageRestGetObjectFromQuery(HttpRequest httpRequest, OutputStream out)
-            throws IOException {
-        Map<String, String> queryParams = httpRequest.getQueryParams();
-        String name = queryParams.get("name");
-        if (name == null || !restApiObjects.containsKey(name)) {
-            return sendNotFoundResponse(out);
-        }
-        HttpResponse response = new HttpResponse();
-        response.setStatusCode(200);
-        response.addHeader("Content-Type", "application/json");
-        response.setBody(restApiObjects.get(name));
-        return response;
-    }
-
-    private static HttpResponse manageRestPostObjectFromQuery(HttpRequest httpRequest, OutputStream out)
-            throws IOException {
-        String name = "";
-        name = httpRequest.getQueryParams().get("name");
-        if (name == null || restApiObjects.containsKey(name)) {
-            return sendNotFoundResponse(out);
-        }
-        HttpResponse response = new HttpResponse();
-        response.setStatusCode(200);
-        response.addHeader("Content-Type", "application/json");
-        String object = "{\n";
-        Map<String, String> queryParams = httpRequest.getQueryParams();
-        ArrayList<String> keys = new ArrayList<>(queryParams.keySet());
-
-        for (String key : keys) {
-            String value = queryParams.get(key);
-            System.out.println("Key: " + key + " Value: " + value);
-            // Decode the value
-            value = URLDecoder.decode(value, StandardCharsets.UTF_8);
-            if (keys.indexOf(key) != keys.size() - 1) {
-                object += "\"" + key + "\" : \"" + value + "\" ,\n";
-            } else {
-                object += "\"" + key + "\" : \"" + value + "\"\n";
-            }
-        }
-        object += "}";
-        restApiObjects.put(name, object);
-        response.setBody(object);
-        return response;
-    }
-
     public static void staticfiles(String path) {
-        return;
+        String folderPath = ("src/main" + path);
+        staticRestFilesPath = folderPath;
+        Path pathF = Paths.get(folderPath);
+        try {
+            Files.createDirectories(pathF);
+            System.out.println("Directory is created!");
+        } catch (IOException e) {
+            System.out.println("Failed to create directory!");
+        }
+    }
+
+    public static String getStaticRestFilesPath() {
+        return staticRestFilesPath;
     }
 
     public static void get(String route, BiFunction<HttpRequest, HttpResponse, HttpResponse> function) {
