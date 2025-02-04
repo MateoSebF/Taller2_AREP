@@ -1,6 +1,10 @@
 # Web Server
 
-This is a laboratory where you can test various aspects of network connections, providing the foundation for understanding how URLs work, how sockets function to establish a basic server-client connection, and ultimately enabling you to create a web server that runs on port 35000. This server can respond to requests for HTML, CSS, JS, and image files, as well as have a REST API to create objects based on query parameters—all using Java's networking library.
+This laboratory allows you to explore various aspects of network connections, providing a foundation for understanding how URLs work, how sockets establish basic server-client communication, and how to create a web server running on port 35000.
+
+The server can handle requests for HTML, CSS, JavaScript, and image files, as well as expose a REST API that creates objects based on query parameters—all implemented using Java's networking library.
+
+A key feature of this project is the ability to define your own server logic using lambda functions, enabling flexible and efficient handling of different types of requests.
 
 ## Getting Started
 
@@ -11,7 +15,7 @@ This project is built in Java using Maven. No additional dependencies are requir
 
 Before running this project, ensure you have the following installed on your system:
 
-* Java Development Kit (JDK) 23
+* Java Development Kit (JDK) 21
     * Download and install from: [Oracle JDK or OpenJDK](https://www.oracle.com/co/java/technologies/downloads/)
     * Verify installation with:
         ```
@@ -37,7 +41,7 @@ Follow these steps to set up and run the project in your local development envir
 Clone the Repository:
 
 ```
-git clone https://github.com/MateoSebF/Taller1_AREP.git
+git clone https://github.com/MateoSebF/Taller2_AREP
 
 ```
 
@@ -58,16 +62,31 @@ Run the Web Server:
 ```
 mvn clean compile exec:java
 ```
-### Test the API
-Try sending a request to the REST API endpoint:
+### Architecture
+The core architecture of this project revolves around the HTTP protocol. At its center, we have an HttpServer that manages incoming user requests. To ensure scalability and maintainability, the design includes two complementary components: HttpRequest and HttpResponse. These two classes standardize the input and output of the server, considering key aspects such as:
 
-http://localhost:35000/app/getObjectFromQuery?name=John&age=15
+![Http protocol](readimages/http.svg)
 
-It should return a JSON object like:
+To use this framework effectively, you need to understand how requests and responses work, particularly when handling them within lambda functions. This includes extracting query parameters, analyzing the URI, and more.
 
-```
-{"name" : "John" , "age" : "15"}
-```
+To ensure proper functionality, your lambda functions must return an HttpResponse, specifying the status code, headers, and body using the appropriate setter methods.
+
+An important aspect to configure is the location from which the server will serve static files. By default, it uses the /src/main/resources/static folder.
+
+A complete example demonstrating the use of HTML, CSS, JavaScript, and images is already set up. You can find and test this example in the WebServer class.
+
+Currently, the server supports the GET, POST, PUT, and UPDATE methods, each requiring the appropriate handler function. Here’s a complete usage example:
+
+![Use example](readimages/example1.png)
+
+### Test the REST serices
+To test this setup, you can use the following endpoint after running the WebServer. By default, it will serve static files from the correct folder:
+
+http://localhost:35000/images/placeholder.png
+
+This request should return the following image:
+
+![Placeholder example](src/main/resources/static/images/placeholder.png)
 
 ## Running the tests
 
@@ -81,9 +100,11 @@ mvn test
 
 ### Break down into end to end tests
 
-The following tests verify the functionality of the server by simulating HTTP requests for different types of files (HTML, CSS, JS, images) and checking the server's responses. These tests ensure that the server correctly handles the requests, serves the expected content, and returns appropriate status codes.
+The following tests verify the functionality of the server by simulating HTTP requests for different types of files (HTML, CSS, JS, images) and checking the server's responses. These tests ensure that the server handles the requests correctly, serves the expected content, and returns the appropriate status codes.
 
-For example, the test **testMakeConnectionHTML()** checks if the server successfully responds to a request for index.html with a 200 OK status. This ensures that the server is running and can handle requests for HTML pages correctly.
+For example, the testMakeConnectionHTML() test checks if the server successfully responds to a request for index.html with a 200 OK status. This ensures that the server is running and can handle requests for HTML pages correctly.
+
+Additionally, I’ve introduced a test class for the HttpRequest to verify its functionality. This includes verifying that the HttpRequest class handles the reading of requests correctly, particularly when the request body is read as a String.
 
 ### And coding style tests
 

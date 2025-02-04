@@ -26,6 +26,7 @@ public class WebServer {
     public static void main(String[] args) throws IOException, URISyntaxException {
         HashMap<String, String> restApiObjects = new HashMap<>();
         HttpServer.staticfiles("/resources/static");
+
         HttpServer.get("/hello", (req, resp) -> {
             resp.setStatusCode(200);
             resp.addHeader("Content-Type", "text/plain");
@@ -40,6 +41,7 @@ public class WebServer {
             resp.setBody(String.valueOf(Math.PI));
             return resp;
         });
+        
         HttpServer.get("/mateo", (req, resp) -> {
             resp.setStatusCode(200);
             resp.addHeader("Content-Type", "text/plain");
