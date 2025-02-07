@@ -54,7 +54,7 @@ cd Taller1_AREP
 Build the Project with Maven:
 
 ```
-mvn clean install
+mvn clean compile
 ```
 
 Run the Web Server:
